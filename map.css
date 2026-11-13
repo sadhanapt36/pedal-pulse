@@ -10,3 +10,18 @@ html, body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
 }
+
+#map svg {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* let clicks/drags pass through to the map */
+}
+
+#map svg circle {
+  fill: #ff6fae;        /* hot pink — pops on pastel (Step 6 recolors this) */
+  fill-opacity: 0.6;
+  stroke: white;
+  stroke-width: 1;
+}

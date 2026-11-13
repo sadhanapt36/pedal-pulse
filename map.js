@@ -1,4 +1,5 @@
 import mapboxgl from 'https://cdn.jsdelivr.net/npm/mapbox-gl@2.15.0/+esm';
+import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 
 console.log('Mapbox GL JS Loaded:', mapboxgl);
 
@@ -63,7 +64,13 @@ const bikeLaneStyle = {
   'line-opacity': 0.6,
 };
 
-map.on('load', () => {
+function getCoords(station) {
+  const point = new mapboxgl.LngLat(+station.lon, +station.lat);
+  const { x, y } = map.project(point); // lat/lng → pixel position on screen
+  return { cx: x, cy: y };
+}
+
+map.on('load', async () => {
   applyPastel(map); // recolor base map first
 
   // 2.1 — Boston
@@ -89,4 +96,31 @@ map.on('load', () => {
     source: 'cambridge_route',
     paint: bikeLaneStyle,
   });
+
+  // 3.1 — load stations
+  const jsonData = await d3.json('https://dsc106.com/labs/lab07/data/bluebikes-stations.json');
+  const stations = jsonData.data.stations;
+  console.log('Stations:', stations);
+
+  // 3.3 — draw one circle per station
+  const svg = d3.select('#map').select('svg');
+  const circles = svg
+    .selectAll('circle')
+    .data(stations)
+    .enter()
+    .append('circle')
+    .attr('r', 5);
+
+  // reposition circles whenever the map changes
+  function updatePositions() {
+    circles
+      .attr('cx', (d) => getCoords(d).cx)
+      .attr('cy', (d) => getCoords(d).cy);
+  }
+
+  updatePositions();
+  map.on('move', updatePositions);
+  map.on('zoom', updatePositions);
+  map.on('resize', updatePositions);
+  map.on('moveend', updatePositions);
 });
