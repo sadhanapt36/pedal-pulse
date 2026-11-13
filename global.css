@@ -8,3 +8,29 @@ body {
   margin: auto;
   padding: 1em;
 }
+
+header {
+  display: flex;
+  gap: 1em;
+  align-items: baseline;
+}
+
+header label {
+  margin-left: auto; /* push slider to the right of the title */
+}
+
+header input {
+  accent-color: #b388eb; /* lilac slider to match the lanes */
+  width: 15em;
+}
+
+header time,
+header em {
+  display: block;
+  text-align: right;
+}
+
+header em {
+  color: #8a7f99;
+  font-style: italic;
+}
