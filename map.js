@@ -56,4 +56,37 @@ function applyPastel(map) {
   }
 }
 
-map.on('load', () => applyPastel(map));
+// Shared style for all bike lane layers (2.3 optional — one object, reused)
+const bikeLaneStyle = {
+  'line-color': '#b388eb', // saturated lilac — pops on pastel
+  'line-width': 3,
+  'line-opacity': 0.6,
+};
+
+map.on('load', () => {
+  applyPastel(map); // recolor base map first
+
+  // 2.1 — Boston
+  map.addSource('boston_route', {
+    type: 'geojson',
+    data: 'https://bostonopendata-boston.opendata.arcgis.com/datasets/boston::existing-bike-network-2022.geojson',
+  });
+  map.addLayer({
+    id: 'bike-lanes-boston',
+    type: 'line',
+    source: 'boston_route',
+    paint: bikeLaneStyle,
+  });
+
+  // 2.3 — Cambridge
+  map.addSource('cambridge_route', {
+    type: 'geojson',
+    data: 'https://raw.githubusercontent.com/cambridgegis/cambridgegis_data/main/Recreation/Bike_Facilities/RECREATION_BikeFacilities.geojson',
+  });
+  map.addLayer({
+    id: 'bike-lanes-cambridge',
+    type: 'line',
+    source: 'cambridge_route',
+    paint: bikeLaneStyle,
+  });
+});
