@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bikewatching</title>
+  <title>Pulse Patterns</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="global.css">
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet" />
@@ -12,15 +12,18 @@
 </head>
 <body>
   <header>
-    <h1>🚴 Bikewatching</h1>
-    <label>
-      Filter by time:
+    <h1>🚴 Pulse Patterns</h1>
+    <p class="subtitle">BlueBikes traffic across Boston and Cambridge in March 2024</p>
+    <p class="tagline">Like a heartbeat, Boston's bike traffic rises and falls through the day. Slide through time to feel the city's pulse.</p>
+    <label class="time-filter">
+      <span>Filter by time</span>
       <input id="time-slider" type="range" min="-1" max="1440" value="-1" />
-      <time id="selected-time"></time>
-      <em id="any-time">(any time)</em>
+      <span class="time-readout">
+        <time id="selected-time"></time>
+        <em id="any-time">(any time)</em>
+      </span>
     </label>
   </header>
-  <p>Visualizing Boston-area BlueBikes traffic, March 2024.</p>
   <div id="map">
     <svg></svg>
   </div>

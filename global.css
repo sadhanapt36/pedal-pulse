@@ -9,30 +9,63 @@ body {
   padding: 1em;
 }
 
+/* Header: centered title, subtitle, slider pill */
 header {
   display: flex;
-  gap: 1em;
-  align-items: baseline;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 1em;
 }
 
-header label {
-  margin-left: auto; /* push slider to the right of the title */
+header h1 {
+  margin: 0;
 }
 
-header input {
-  accent-color: #b388eb; /* lilac slider to match the lanes */
-  width: 15em;
+.tagline {
+  margin: 0.4em 0 0.2em;
+  max-width: 34em;
+  font-size: 1.1em;
+  color: #4a4458;
 }
 
-header time,
-header em {
-  display: block;
-  text-align: right;
+.tagline + .time-filter {
+  margin-top: 0.8em;
 }
 
-header em {
-  color: #8a7f99;
+.subtitle {
+  margin: 0.1em 0 0.3em;
+  text-align: center;
   font-style: italic;
+  font-size: 0.85em;
+  letter-spacing: 0.03em;
+  color: #8a7f99;
+}
+
+.time-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: 0.5em 1.25em;
+  background: #f6f0fb;     /* soft lilac pill */
+  border-radius: 999px;
+  font-size: 0.95em;
+}
+
+.time-filter input {
+  accent-color: #b388eb;   /* lilac slider to match the lanes */
+  width: 18em;
+}
+
+.time-readout {
+  min-width: 6em;          /* fixed width so the slider doesn't jump */
+  text-align: left;
+  font-weight: 600;
+}
+
+.time-readout em {
+  font-weight: 400;
+  color: #8a7f99;
 }
 
 /* 6.1 — circle + legend colors from departure ratio */
