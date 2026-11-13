@@ -1,0 +1,12 @@
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+#map {
+  flex: 1;              /* fills the rest of the flex column from global.css */
+  width: 100%;
+  min-height: 500px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+}
