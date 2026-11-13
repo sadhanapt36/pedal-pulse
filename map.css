@@ -20,7 +20,6 @@ html, body {
 }
 
 #map svg circle {
-  fill: #ff6fae;        /* hot pink — pops on pastel (Step 6 recolors this) */
   fill-opacity: 0.6;
   stroke: white;
   stroke-width: 1;

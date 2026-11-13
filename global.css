@@ -34,3 +34,47 @@ header em {
   color: #8a7f99;
   font-style: italic;
 }
+
+/* 6.1 — circle + legend colors from departure ratio */
+#map svg circle,
+.legend > div {
+  --color-departures: steelblue; /* people leaving */
+  --color-arrivals:   darkorange; /* people arriving */
+  --color: color-mix(
+    in oklch,
+    var(--color-departures) calc(100% * var(--departure-ratio)),
+    var(--color-arrivals)
+  );
+  fill: var(--color);
+}
+
+/* 6.2 — legend (Design 2: swatches + labels) */
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* center the legend under the map */
+  gap: 2em;              /* big gap BETWEEN items */
+  margin-block: 1em;
+}
+
+.legend-label {
+  text-transform: uppercase;
+  color: #8a8a9a;
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.legend > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;            /* small gap between swatch and its label */
+}
+
+.legend > div::before {
+  content: "";
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;    /* circle swatch, matches the map circles */
+  background: var(--color);
+}

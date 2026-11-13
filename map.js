@@ -70,6 +70,13 @@ function getCoords(station) {
   return { cx: x, cy: y };
 }
 
+// 6.1 — departure ratio → 0 (mostly arrivals), 0.5 (balanced), 1 (mostly departures)
+const stationFlow = d3.scaleQuantize().domain([0, 1]).range([0, 0.5, 1]);
+
+function departureRatio(d) {
+  return d.totalTraffic ? stationFlow(d.departures / d.totalTraffic) : 0.5; // avoid 0/0
+}
+
 function formatTime(minutes) {
   const date = new Date(0, 0, 0, 0, minutes); // midnight + N minutes
   return date.toLocaleString('en-US', { timeStyle: 'short' }); // e.g. "8:30 AM"
@@ -163,6 +170,7 @@ map.on('load', async () => {
     .enter()
     .append('circle')
     .attr('r', (d) => radiusScale(d.totalTraffic))
+    .style('--departure-ratio', (d) => departureRatio(d))
     .each(function (d) {
       d3.select(this)
         .append('title')
@@ -194,7 +202,8 @@ map.on('load', async () => {
       .selectAll('circle')
       .data(filteredStations, (d) => d.short_name)
       .join('circle')
-      .attr('r', (d) => radiusScale(d.totalTraffic));
+      .attr('r', (d) => radiusScale(d.totalTraffic))
+      .style('--departure-ratio', (d) => departureRatio(d));
 
     circles
       .select('title')
