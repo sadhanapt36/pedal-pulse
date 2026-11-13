@@ -97,10 +97,40 @@ map.on('load', async () => {
     paint: bikeLaneStyle,
   });
 
-  // 3.1 — load stations
+    // 3.1 — load stations
   const jsonData = await d3.json('https://dsc106.com/labs/lab07/data/bluebikes-stations.json');
-  const stations = jsonData.data.stations;
-  console.log('Stations:', stations);
+  let stations = jsonData.data.stations;
+
+  // 4.1 — load trips (~260k rows, takes a sec)
+  const trips = await d3.csv('https://dsc106.com/labs/lab07/data/bluebikes-traffic-2024-03.csv');
+  console.log('Trips loaded:', trips.length);
+
+  // 4.2 — count departures & arrivals per station
+  const departures = d3.rollup(
+    trips,
+    (v) => v.length,
+    (d) => d.start_station_id,
+  );
+  const arrivals = d3.rollup(
+    trips,
+    (v) => v.length,
+    (d) => d.end_station_id,
+  );
+
+  stations = stations.map((station) => {
+    const id = station.short_name;
+    station.arrivals = arrivals.get(id) ?? 0;
+    station.departures = departures.get(id) ?? 0;
+    station.totalTraffic = station.arrivals + station.departures;
+    return station;
+  });
+  console.log('Stations w/ traffic:', stations);
+
+  // 4.3 — size by traffic (sqrt so AREA ∝ traffic, not radius)
+  const radiusScale = d3
+    .scaleSqrt()
+    .domain([0, d3.max(stations, (d) => d.totalTraffic)])
+    .range([0, 25]);
 
   // 3.3 — draw one circle per station
   const svg = d3.select('#map').select('svg');
@@ -109,7 +139,13 @@ map.on('load', async () => {
     .data(stations)
     .enter()
     .append('circle')
-    .attr('r', 5);
+    .attr('r', (d) => radiusScale(d.totalTraffic))
+    // 4.4 — tooltip on hover
+    .each(function (d) {
+      d3.select(this)
+        .append('title')
+        .text(`${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`);
+    });
 
   // reposition circles whenever the map changes
   function updatePositions() {
